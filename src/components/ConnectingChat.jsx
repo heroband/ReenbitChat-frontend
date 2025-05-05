@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 
 const ConnectingChat = ({ joinChat }) => {
   const [username, setUserName] = useState('');
@@ -14,23 +14,34 @@ const ConnectingChat = ({ joinChat }) => {
 
   return (
     <Box
-      component="form"
-      onSubmit={handleSubmit}
       display="flex"
-      flexDirection="column"
+      justifyContent="center"
       alignItems="center"
-      gap={2}
-      mt={5}
+      height="100vh"
+      bgcolor="#f5f5f5"
     >
-      <Typography variant="h5">Введи ім’я користувача</Typography>
-      <TextField
-        label="Ім’я"
-        value={username}
-        onChange={e => setUserName(e.target.value)}
-      />
-      <Button variant="contained" type="submit">
-        Приєднатися
-      </Button>
+      <Paper elevation={3} sx={{ p: 4, width: 300, textAlign: 'center' }}>
+        <Typography variant="h5" gutterBottom>
+          Введи ім’я користувача
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          display="flex"
+          flexDirection="column"
+          gap={2}
+        >
+          <TextField
+            label="Ім’я"
+            value={username}
+            onChange={e => setUserName(e.target.value)}
+            autoFocus
+          />
+          <Button variant="contained" type="submit">
+            Приєднатися
+          </Button>
+        </Box>
+      </Paper>
     </Box>
   );
 };
