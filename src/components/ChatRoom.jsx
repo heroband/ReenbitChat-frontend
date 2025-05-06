@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 
 import MessageInput from './MessageInput';
 import MessageList from './MessageList';
