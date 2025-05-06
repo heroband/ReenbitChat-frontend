@@ -20,7 +20,16 @@ const ConnectingChat = ({ joinChat }) => {
       height="100vh"
       bgcolor="#f5f5f5"
     >
-      <Paper elevation={3} sx={{ p: 4, width: 300, textAlign: 'center' }}>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          width: 320,
+          textAlign: 'center',
+          borderRadius: 4,
+          background: 'linear-gradient(to top, #ffffff, #f0f4ff)',
+        }}
+      >
         <Typography variant="h5" gutterBottom>
           Введи ім’я користувача
         </Typography>

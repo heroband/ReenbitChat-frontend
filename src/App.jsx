@@ -10,6 +10,10 @@ function App() {
   const [username, setUsername] = useState('');
   const [messages, setMessages] = useState([]);
 
+  useEffect(() => {
+    localStorage.removeItem('chat-username');
+  }, []);
+
   const startConnection = async username => {
     const newConnection = new signalR.HubConnectionBuilder()
       .withUrl(
@@ -30,6 +34,7 @@ function App() {
 
       setConnection(newConnection);
       setUsername(username);
+      localStorage.setItem('chat-username', username);
 
       await fetchMessages();
     } catch (error) {
