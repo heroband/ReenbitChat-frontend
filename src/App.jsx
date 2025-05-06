@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import * as signalR from '@microsoft/signalr';
 
@@ -11,7 +11,19 @@ function App() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    localStorage.removeItem('chat-username');
+    const savedUsername = localStorage.getItem('chat-username');
+    const isConnected = connection?.state === signalR.HubConnectionState.Connected;
+    console.log(`useEffect connection is ${connection} `);
+
+    if (savedUsername && !isConnected) {
+      startConnection(savedUsername);
+    }
+
+    return () => {
+      if (connection) {
+        connection.stop();
+      }
+    };
   }, []);
 
   const startConnection = async username => {
@@ -23,16 +35,14 @@ function App() {
       .build();
 
     newConnection.on('ReceiveMessage', messageDto => {
-      console.log(`${messageDto.user} - ${messageDto.text}`);
       setMessages(prev => [...prev, messageDto]);
     });
 
     try {
       await newConnection.start();
       await newConnection.invoke('JoinChat', username);
-      console.log('SignalR підключено');
-
       setConnection(newConnection);
+
       setUsername(username);
       localStorage.setItem('chat-username', username);
 
@@ -48,8 +58,7 @@ function App() {
         `https://reenbit-chat-backend-gscdgycdamguegcp.westeurope-01.azurewebsites.net/api/messages`,
       );
       const data = await response.json();
-      setMessages(prev => [...prev, ...data]);
-      console.log('Отримані повідомлення з бекенда:', data);
+      setMessages(data);
     } catch (error) {
       console.error('Помилка при завантаженні повідомлень:', error);
     }

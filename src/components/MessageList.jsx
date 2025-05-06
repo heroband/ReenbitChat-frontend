@@ -1,8 +1,16 @@
+import { useEffect, useRef } from 'react';
+
 import { Stack } from '@mui/material';
 
 import MessageItem from './MessageItem';
 
 const MessageList = ({ messages }) => {
+  const afterMessagesRef = useRef();
+
+  useEffect(() => {
+    afterMessagesRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <Stack spacing={1}>
       {messages.map((msg, idx) => (
@@ -14,6 +22,7 @@ const MessageList = ({ messages }) => {
           messageType={msg.messageType}
         />
       ))}
+      <span ref={afterMessagesRef} />
     </Stack>
   );
 };
