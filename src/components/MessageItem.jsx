@@ -1,8 +1,21 @@
 import { Box, Paper, Typography } from '@mui/material';
 
-const MessageItem = ({ username, message, timestamp, messageType }) => {
+const MessageItem = ({ username, message, sentiment, timestamp, messageType }) => {
   const isSystem = messageType === 'system';
   const isSelf = username === localStorage.getItem('chat-username');
+
+  const getSentimentEmoji = sentiment => {
+    switch (sentiment) {
+      case 'Positive':
+        return '😊';
+      case 'Negative':
+        return '😞';
+      case 'Neutral':
+        return '😐';
+      default:
+        return '';
+    }
+  };
 
   if (isSystem) {
     return (
@@ -27,8 +40,10 @@ const MessageItem = ({ username, message, timestamp, messageType }) => {
       >
         <Typography variant="body2" fontWeight="bold">
           {username}
+          {getSentimentEmoji(sentiment)}
         </Typography>
         <Typography variant="body1">{message}</Typography>
+
         <Typography
           variant="caption"
           color="text.secondary"

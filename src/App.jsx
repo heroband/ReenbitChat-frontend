@@ -28,13 +28,14 @@ function App() {
 
   const startConnection = async username => {
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl(
-        'https://reenbit-chat-backend-gscdgycdamguegcp.westeurope-01.azurewebsites.net/chatHub',
-      )
+      .withUrl('https://localhost:44347/chatHub')
       .withAutomaticReconnect()
       .build();
 
+    // 'https://reenbit-chat-backend-gscdgycdamguegcp.westeurope-01.azurewebsites.net/chatHub'
+
     newConnection.on('ReceiveMessage', messageDto => {
+      console.log(`got a message`, messageDto);
       setMessages(prev => [...prev, messageDto]);
     });
 
@@ -65,7 +66,11 @@ function App() {
   };
 
   const sendMessage = async message => {
-    if (connection && username) {
+    if (
+      connection &&
+      connection.state === signalR.HubConnectionState.Connected &&
+      username
+    ) {
       try {
         await connection.invoke('SendMessage', {
           user: username,
@@ -74,6 +79,8 @@ function App() {
       } catch (error) {
         console.error('Помилка при надсиланні повідомлення:', error);
       }
+    } else {
+      console.error(`Немає підключення чи з'єднання не готове`);
     }
   };
 

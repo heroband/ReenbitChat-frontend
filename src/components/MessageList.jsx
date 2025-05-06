@@ -18,6 +18,7 @@ const MessageList = ({ messages }) => {
           key={idx}
           username={msg.user}
           message={msg.text}
+          sentiment={msg.sentiment}
           timestamp={msg.timestamp}
           messageType={msg.messageType}
         />
