@@ -28,11 +28,11 @@ function App() {
 
   const startConnection = async username => {
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:44347/chatHub')
+      .withUrl(
+        'https://reenbit-chat-backend-gscdgycdamguegcp.westeurope-01.azurewebsites.net/chatHub',
+      )
       .withAutomaticReconnect()
       .build();
-
-    // 'https://reenbit-chat-backend-gscdgycdamguegcp.westeurope-01.azurewebsites.net/chatHub'
 
     newConnection.on('ReceiveMessage', messageDto => {
       console.log(`got a message`, messageDto);
@@ -72,6 +72,8 @@ function App() {
       username
     ) {
       try {
+        console.log(connection.state);
+
         await connection.invoke('SendMessage', {
           user: username,
           text: message,
