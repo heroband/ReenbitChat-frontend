@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Box, Paper, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, IconButton, Paper, Typography } from '@mui/material';
 
 import MessageInput from './MessageInput';
 import MessageList from './MessageList';
 
-const ChatRoom = ({ messages, onSend }) => {
+/**
+ * ChatRoom component renders the chat interface including
+ * the message list and message input field
+ */
+const ChatRoom = ({ messages, onSend, onLeave }) => {
   return (
     <Box
       display="flex"
@@ -18,18 +23,34 @@ const ChatRoom = ({ messages, onSend }) => {
         boxSizing: 'border-box',
       }}
     >
-      {/* Заголовок над чатом */}
-      <Typography
-        variant="h5"
-        gutterBottom
-        align="center"
-        fontWeight="bold"
+      {/* Chat header with the leave button */}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        width="100%"
+        alignItems="center"
         sx={{ flexShrink: 0, mb: 1 }}
       >
-        💬 Reenbit Chat
-      </Typography>
+        <Typography variant="h5" gutterBottom align="center" fontWeight="bold">
+          💬 Reenbit Chat
+        </Typography>
 
-      {/* Контейнер чату та інпуту */}
+        {/* Leave chat button */}
+        <IconButton
+          color="secondary"
+          onClick={onLeave}
+          sx={{
+            color: 'red', // колір хрестика
+            ':hover': {
+              backgroundColor: 'rgba(255, 0, 0, 0.1)',
+            },
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      {/* Main chat container with messages and input */}
       <Box
         display="flex"
         flexDirection="column"
@@ -38,7 +59,7 @@ const ChatRoom = ({ messages, onSend }) => {
         flexGrow={1}
         sx={{ overflow: 'hidden' }}
       >
-        {/* Вікно чату зі скролом */}
+        {/* Scrollable message list */}
         <Paper
           elevation={3}
           sx={{
@@ -53,7 +74,7 @@ const ChatRoom = ({ messages, onSend }) => {
           <MessageList messages={messages} />
         </Paper>
 
-        {/* Поле введення повідомлення */}
+        {/* Message input field */}
         <Box sx={{ flexShrink: 0 }}>
           <MessageInput onSend={onSend} />
         </Box>

@@ -2,9 +2,19 @@ import React, { useState } from 'react';
 
 import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 
+/**
+ * The ConnectingChat component allows the user
+ * to enter a username and join a chat. Once the username
+ * is specified, the `joinChat` function is called
+ * to set the connection
+ */
 const ConnectingChat = ({ joinChat }) => {
   const [username, setUserName] = useState('');
 
+  /**
+   * Handles the form submission when the user enters username
+   * Calls `joinChat` if the username is not empty
+   */
   const handleSubmit = e => {
     e.preventDefault();
     if (username.trim()) {
@@ -31,7 +41,7 @@ const ConnectingChat = ({ joinChat }) => {
         }}
       >
         <Typography variant="h5" gutterBottom>
-          Введи ім’я користувача
+          Enter your name
         </Typography>
         <Box
           component="form"
@@ -40,14 +50,17 @@ const ConnectingChat = ({ joinChat }) => {
           flexDirection="column"
           gap={2}
         >
+          {/* Input field for the username */}
           <TextField
-            label="Ім’я"
+            label="Username"
             value={username}
             onChange={e => setUserName(e.target.value)}
             autoFocus
           />
+
+          {/* Button to submit the form and join the chat */}
           <Button variant="contained" type="submit">
-            Приєднатися
+            Join
           </Button>
         </Box>
       </Paper>
