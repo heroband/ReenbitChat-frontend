@@ -55,7 +55,15 @@ const MessageItem = ({ username, message, sentiment, timestamp, messageType }) =
         </Typography>
 
         {/* Display the actual message */}
-        <Typography variant="body1">{message}</Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
+          }}
+        >
+          {message}
+        </Typography>
 
         {/* Display the time */}
         <Typography

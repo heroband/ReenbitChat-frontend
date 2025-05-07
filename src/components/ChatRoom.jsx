@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { toast } from 'react-toastify';
+
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, IconButton, Paper, Typography } from '@mui/material';
 
@@ -11,6 +13,15 @@ import MessageList from './MessageList';
  * the message list and message input field
  */
 const ChatRoom = ({ messages, onSend, onLeave }) => {
+  const handleSend = async text => {
+    try {
+      await onSend(text);
+    } catch (err) {
+      console.error('Error while sending message: ', err);
+      toast.error('It was not possible to send a message');
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -23,7 +34,7 @@ const ChatRoom = ({ messages, onSend, onLeave }) => {
         boxSizing: 'border-box',
       }}
     >
-      {/* Chat header with the leave button */}
+      {/* Header */}
       <Box
         display="flex"
         justifyContent="space-between"
@@ -34,13 +45,11 @@ const ChatRoom = ({ messages, onSend, onLeave }) => {
         <Typography variant="h5" gutterBottom align="center" fontWeight="bold">
           💬 Reenbit Chat
         </Typography>
-
-        {/* Leave chat button */}
         <IconButton
           color="secondary"
           onClick={onLeave}
           sx={{
-            color: 'red', // колір хрестика
+            color: 'red',
             ':hover': {
               backgroundColor: 'rgba(255, 0, 0, 0.1)',
             },
@@ -50,7 +59,7 @@ const ChatRoom = ({ messages, onSend, onLeave }) => {
         </IconButton>
       </Box>
 
-      {/* Main chat container with messages and input */}
+      {/* Chat Container */}
       <Box
         display="flex"
         flexDirection="column"
@@ -59,7 +68,6 @@ const ChatRoom = ({ messages, onSend, onLeave }) => {
         flexGrow={1}
         sx={{ overflow: 'hidden' }}
       >
-        {/* Scrollable message list */}
         <Paper
           elevation={3}
           sx={{
@@ -74,9 +82,9 @@ const ChatRoom = ({ messages, onSend, onLeave }) => {
           <MessageList messages={messages} />
         </Paper>
 
-        {/* Message input field */}
+        {/* Input */}
         <Box sx={{ flexShrink: 0 }}>
-          <MessageInput onSend={onSend} />
+          <MessageInput onSend={handleSend} />
         </Box>
       </Box>
     </Box>

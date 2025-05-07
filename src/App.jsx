@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { ToastContainer } from 'react-toastify';
+
 import * as signalR from '@microsoft/signalr';
 
 import ChatRoom from './components/ChatRoom';
 import ConnectingChat from './components/ConnectingChat';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const MAX_LENGTH = 4096;
 
 function App() {
   const [connection, setConnection] = useState(null); // SignalR connection instance
@@ -66,7 +69,6 @@ function App() {
       console.log(`Trying to fetch messages...`);
       try {
         const response = await fetch(`${BACKEND_URL}/api/messages`);
-
         const text = await response.text();
 
         if (!response.ok || !text) {
@@ -98,18 +100,25 @@ function App() {
       connection.state === signalR.HubConnectionState.Connected &&
       username
     ) {
-      try {
-        console.log(connection.state);
+      const chunks = [];
+      for (let i = 0; i < message.length; i += MAX_LENGTH) {
+        chunks.push(message.slice(i, i + MAX_LENGTH));
+      }
 
-        await connection.invoke('SendMessage', {
-          user: username,
-          text: message,
-        });
+      try {
+        for (const chunk of chunks) {
+          await connection.invoke('SendMessage', {
+            user: username,
+            text: chunk,
+          });
+        }
       } catch (error) {
         console.error('Error while sending message:', error);
+        throw error;
       }
     } else {
       console.error(`No connection or connection is not ready`);
+      throw err;
     }
   };
 
@@ -121,7 +130,10 @@ function App() {
 
   // Render chat or connection screen depending on connection state
   return connection ? (
-    <ChatRoom messages={messages} onSend={sendMessage} onLeave={leaveChat} />
+    <>
+      <ToastContainer position="bottom-right" />
+      <ChatRoom messages={messages} onSend={sendMessage} onLeave={leaveChat} />
+    </>
   ) : (
     <ConnectingChat joinChat={startConnection} />
   );
