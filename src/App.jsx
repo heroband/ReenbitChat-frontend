@@ -10,7 +10,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 function App() {
   const [connection, setConnection] = useState(null); // SignalR connection instance
   const [username, setUsername] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]); // Last messages
 
   useEffect(() => {
     const savedUsername = localStorage.getItem('chat-username');
